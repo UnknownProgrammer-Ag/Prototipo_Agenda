@@ -14,9 +14,13 @@ Reunion
     Participantes (Colección) --> ¿Quiénes participan de la reunión?
 
     Tema (String) --> ¿Qué tema será el eje de la reunión?
-
+    Hora de Inicio --> Formato Hr:mts --> Permitir calcular con duración
     Duración (Entero o formateado a estilo horas:minutos) ¿Cuánto dura la reunión?
     Fecha (Date) --> Usar para filtrar las reuniones
+    
+
+    Se deberá poder buscar reuniones por fecha, el sistema detecte solapamientos y permita anularlos
+    Se deberá poder eliminar reuniones
 
 Usuario
 ## Atributos

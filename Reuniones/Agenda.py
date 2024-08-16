@@ -25,7 +25,7 @@ class Reunion:
 
     def asistencia(self):
         self.pendiente = False
-    
+
     def listar(self):
         horas = self.duracion//60
         minutos = self.duracion % 60
@@ -44,7 +44,7 @@ class Usuario:
 
     def __repr__(self):
         return "Representa al usuario del que corresponde la agenda"
-        
+
     def cargar_reunion(self):
         print('===========================')
         print('Creador de Reunión')
