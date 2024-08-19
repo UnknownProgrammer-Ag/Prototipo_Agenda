@@ -4,24 +4,16 @@ import datetime
 
 
 class Reunion:
-    def __init__(self, id, mod, det, part, tem, dur, date):
+    def __init__(self, id, mod, det, part, tem, hour, dur, date):
         self.nroR = id
-        # Dos opciones: Presencial o Virtual
         self.modalidad = mod
-        # Presencial --> Dirección o descripción referencial
-        # Virtual --> Código
         self.detalle = det
         self.participantes = part
         self.tema = tem
-        # Contabilizada en minutoss --> Mostrada en horas:minutos
+        self.horaI = hour
         self.duracion = dur
-        # Fecha de reunión como un string
         self.fecha = date
-        # Cuando el usuario revise las reuniones se le dará la posibilidad de "completar" las reuniones asistidas
         self.pendiente = True
-
-    def __repr__(self):
-        return "Representa la clase reunión con detalles de su modalidad, completitud, duración"
 
     def asistencia(self):
         self.pendiente = False
@@ -42,9 +34,6 @@ class Usuario:
         self.reuniones = []
         self.cant = 0
 
-    def __repr__(self):
-        return "Representa al usuario del que corresponde la agenda"
-
     def cargar_reunion(self):
         print('===========================')
         print('Creador de Reunión')
@@ -52,10 +41,9 @@ class Usuario:
         mod = input('¿Que clase de reunión será? [ Presencial|Virtual ] ')
         if (mod == 'Presencial' or mod == 'presencial'):
             print('Ingrese una breve indicacion de lugar [Casa de X] ó una breve dirección [Calle X Piso X] ')
-            det = input()
         else:
             print('Ingrese el código de la reunión [Presione Enter para dejar en blanco] ')
-            det = input()
+        det = input()
         part = []
         while True:
             item = input('Ingrese el nombre|apodo|apellido del participante ')
@@ -64,12 +52,13 @@ class Usuario:
             if add == 'N':
                 break
         tem = input('Ingrese el tema de la reunión ')
+        hour = input('Ingrese la hora de inicio en formato hh:mm ')
         dur = int(input('Ingrese la duración en minutos de la reunión (estimada) '))
         entrada_fecha = input('Ingrese la fecha de la reunión YYYY.MM.DD ')
         year, month, day = map(int, entrada_fecha.split('.'))
         date = datetime.date(year, month, day)
         id = self.cant
-        r = Reunion(id, mod, det, part, tem, dur, date)
+        r = Reunion(id, mod, det, part, tem, hour, dur, date)
         self.cant += 1
         self.reuniones.append(r)
 
