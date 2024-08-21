@@ -35,8 +35,30 @@ class Usuario:
         self.identidad = name
         self.pendientes = 0
         self.asistidas = 0
-        self.agenda = None
+        self.total = 0
+    
+    def estadistica(self):
+        print(f'Reuniones Total: {self.total}\n')
+        print(f'Reuniones Asistidas: {self.asistidas}\n')
+        print(f'Reuniones Pendientes: {self.pendientes}\n')
 
-    # Método para resguardar usuario
+def clear():
+    os.system('cls')
 
+class Agenda:
+    def __init__(self):
+        self.usuario = None
+        self.reuniones = []
+        self.indexReunion = 0
+
+    # Listar una version resumida de todas las reuniones con una numeración. Ex: ID y Modalidad y Tema
+    # Usuario ingrese número de item (no ID) que quiera expandir, y llamar a listar()
+    # Método para guardar y cargar usuario
+    # Método para guardar y cargar reuniones
+    # Método de creacion de Reuniones
+    # Método de creacion de usuario
+    # Método de eliminación y modificación de reuniones
+
+    # Método para un menú o generar una función principal?
+    # Figlet
 
