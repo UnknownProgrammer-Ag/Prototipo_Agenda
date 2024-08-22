@@ -16,15 +16,15 @@ class Reunion:
         horas = self.duracion // 60
         minutos = self.duracion % 60
 
-        print(f'=======\nReunión {self.nroR}\n=======\n')
-        print(f'
-        Modalidad: {self.modalidad}\n
-        Detalle: {self.detalle}\n
-        Tema: {self.tema}\n
-        Participantes: {self.participantes}\n
-        Hora de Inicio: {self.horaInicio}\n
-        Duración: {horas} hr : {minutos} min\n
-        Fecha: {self.fecha}\n')
+        print(f"=======\nReunión {self.nroR}\n=======\n"
+        f"Modalidad: {self.modalidad}\n"
+        f"Detalle: {self.detalle}\n"
+        f"Tema: {self.tema}\n"
+        f"Participantes: {self.participantes}\n"
+        f"Hora de Inicio: {self.horaInicio}\n"
+        f"Duración: {horas} hr : {minutos} min\n"
+        f"Fecha: {self.fecha}\n")
+
         if self.pendiente:
             print('Estado: PENDIENTE')
         else:
@@ -51,10 +51,22 @@ class Agenda:
         self.reuniones = []
         self.indexReunion = 0
 
+    def showAndSelect(self):
+        for (i, re) in enumerate(self.reuniones):
+            print(f"{i+1}. Reunión {re.nroR}| {re.modalidad}| Sobre {re.tema}")
+        
+        select = int(input('Indique el item [1..n] de la reunión que desea expandir.\n Ingrese 0 para salir '))
+        if isInteger(select) and select != 0 :
+            reuniones[select-1].listar()
+
+
+
     # Listar una version resumida de todas las reuniones con una numeración. Ex: ID y Modalidad y Tema
     # Usuario ingrese número de item (no ID) que quiera expandir, y llamar a listar()
+    
     # Método para guardar y cargar usuario
     # Método para guardar y cargar reuniones
+    
     # Método de creacion de Reuniones
     # Método de creacion de usuario
     # Método de eliminación y modificación de reuniones

@@ -21,12 +21,17 @@ class Reunion:
     def listar(self):
         horas = self.duracion//60
         minutos = self.duracion % 60
-        print(f'=======\nReunión {self.nroR}\n=======\nModalidad: {self.modalidad}\nDetalle: {self.detalle}\nParticipantes: {self.participantes}\nTema: {self.tema}\nDuración: {horas} hrs : {minutos} min\nFecha: {self.fecha}')
+        print(f"=======\nReunión {self.nroR}\n=======\n"
+        f"Modalidad: {self.modalidad}\n"
+        f"Detalle: {self.detalle}\n"
+        f"Participantes: {self.participantes}\n"
+        f"Tema: {self.tema}\n"
+        f"Duración: {horas} hrs : {minutos} min\n"
+        f"Fecha: {self.fecha}")
         if self.pendiente:
             print('Estado: Pendiente')
         else:
             print('Estado: Asistido')
-
 
 class Usuario:
     def __init__(self, name):
@@ -64,7 +69,7 @@ class Usuario:
 
     def mostrarReuniones(self):
         for re in self.reuniones:
-            print(f'{re.listar()}\n')
+            re.listar()
 
 
 def clear():
