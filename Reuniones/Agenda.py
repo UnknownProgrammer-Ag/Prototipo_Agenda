@@ -4,15 +4,14 @@ import datetime
 
 
 class Reunion:
-    def __init__(self, id, mod, det, part, tem, hour, dur, date):
+    def __init__(self, id, mod, det, part, tem, datetime, dur):
         self.nroR = id
         self.modalidad = mod
         self.detalle = det
         self.participantes = part
         self.tema = tem
-        self.horaInicio = hour
+        self.fechaHora = datetime
         self.duracion = dur
-        self.fecha = date
         self.pendiente = True
 
     def listar(self):
@@ -24,10 +23,9 @@ class Reunion:
         f"Detalle: {self.detalle}\n"
         f"Tema: {self.tema}\n"
         f"Participantes: {self.participantes}\n"
-        f"Hora de Inicio: {self.horaInicio}\n"
-        f"Duración: {horas} hr : {minutos} min\n"
-        f"Fecha: {self.fecha}\n")
-
+        f"Fecha: {self.fechaHora.date()}\n"
+        f"Hora de Inicio: {self.fechaHora.time()}\n"
+        f"Duración: {horas} hr : {minutos} min\n")
         if self.pendiente:
             print('Estado: PENDIENTE')
         else:
@@ -79,15 +77,40 @@ class Agenda:
             if add == 'N':
                 break
         tem = input("Indique el tema de la reunión ")
-        hour = input("Indique la hora de inicio en formato hh:mm ")
         dur = int(input("Indique la duración en minutos de la reunión (estimada en minutos) "))
-        entrada_fecha = input("Indique la fecha de la reunión YYYY.MM.DD ")
-        year, month, day = map(int, entrada_fecha.split('.'))
-        date = datetime.date(year, month, day)
+        # --------
+        # Carga de fecha usando datetime y un catch de error
+        datetime = None
+        while datetime == None:
+            try:
+                year, month, day, hour, min = map(int, input("Ingrese fecha y hora de inicio, en formato YYYY MM DD hh mm, separado por espacio").split())
+                datetime = datetime.datetime(year, month, day, hour, min)
+            except ValueError:
+                print("Ingrese una fecha válida")
+        # Cargar de reunión e incremento de index
         id = self.indexReunion
         self.indexReunion += 1
-        r = Reunion(id, mod, det, part, tem, hour, dur, date)
+        r = Reunion(id, mod, det, part, tem, datetime, dur)
+        self.checkOverlap(r)
         self.reuniones.append(r)
+
+    def checkOverlap(r):
+        overlap = []
+        for re in self.reuniones:
+            if re.fechaHora.date() == r.fechaHora.date():
+                overlap.append(re)
+            horaFin = r.fechaHora.time() + datetime.timedelta(minutes = dur)
+        for re in overlap:
+            horaFin2 = re.fechaHora.time() + datetime.timedelta(minutes = re.duracion)
+
+            if horaFin > re.fechaHora.time()
+                print(f"La reunión creada {r.nroR} choca con la reunión existente {re.nroR}")
+                print(f"Hay una diferencia de {horaFin - re.fechaHora.time()}")
+                self.Modify(r)
+            else horaFin2 > r.fechaHora.time():
+                print(f"La reunión existente {re.nroR} choca con la reunión creada {r.nroR}")
+                print(f"Hay una diferencia de {horaFin2 - r.fechaHora.time()}")
+                self.Modify(re)
 
     def save_reunion(self, filename):
         with open(filename, 'wb') as savefile:
@@ -120,7 +143,7 @@ class Agenda:
             else:
                 print("No se acepta vacío, indique un nombre de usuario")
 
-    def deleteOrModify(self):
+    def Modify(self, Reunion):
 
 
     # Método para un menú o generar una función principal?
