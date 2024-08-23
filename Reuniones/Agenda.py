@@ -89,21 +89,21 @@ class Agenda:
                 print("Ingrese una fecha válida")
         # Cargar de reunión e incremento de index
         id = self.indexReunion
-        self.indexReunion += 1
         r = Reunion(id, mod, det, part, tem, datetime, dur)
-        self.checkOverlap(r)
-        self.reuniones.append(r)
+        if self.checkOverlap(r):
+            self.reuniones.append(r)
+            self.indexReunion += 1
 
-    def checkOverlap(r):
+    def checkOverlap(self, r):
         overlap = []
         for re in self.reuniones:
-            if re.fechaHora.date() == r.fechaHora.date():
+            if re.fechaHora.date() == r.fechaHora.date() and re.fechaHora.time() < (r.fechaHora+datetime.timedelta(minutes = r. duracion)):
                 overlap.append(re)
-            horaFin = r.fechaHora.time() + datetime.timedelta(minutes = dur)
+            horaFin = r.fechaHora + datetime.timedelta(minutes = r.duracion)
         for re in overlap:
-            horaFin2 = re.fechaHora.time() + datetime.timedelta(minutes = re.duracion)
+            horaFin2 = re.fechaHora + datetime.timedelta(minutes = re.duracion)
 
-            if horaFin > re.fechaHora.time()
+            if horaFin > re.fechaHora.time():
                 print(f"La reunión creada {r.nroR} choca con la reunión existente {re.nroR}")
                 print(f"Hay una diferencia de {horaFin - re.fechaHora.time()}")
                 self.Modify(r)
