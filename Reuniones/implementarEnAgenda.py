@@ -34,14 +34,15 @@ def checkOverlap(r):
 
 reuniones = []
 indexReunion = 0
-for _ in range(5):
+for _ in range(2):
     year, month, day, hour, min = map(int, input("Fecha y Hora ").split())
     dura = int(input("Duracion "))
     date = datetime.datetime(year, month, day, hour, min)
     x = Reunion(indexReunion, date, dura)
     reuniones.append(x)
     indexReunion += 1
-
+for re in reuniones:
+    re.fecha.strftime('%A %d %B %Y')
 r = reuniones[0]
 check = checkOverlap(r)
 if not check:
