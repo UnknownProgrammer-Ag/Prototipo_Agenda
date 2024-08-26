@@ -50,10 +50,11 @@ class Usuario:
         self.total = 0
 
     def estadistica(self):
-        print(f'Reuniones Total: {self.total}\n')
-        print(f'Reuniones Asistidas: {self.asistidas}\n')
-        print(f'Reuniones Pendientes: {self.pendientes}\n')
-
+        print("============================")
+        print(f'Reuniones Total: {self.total}')
+        print(f'Reuniones Asistidas: {self.asistidas}')
+        print(f'Reuniones Pendientes: {self.pendientes}')
+        print("============================\n")
 
 class Agenda:
     def __init__(self):
@@ -68,7 +69,7 @@ class Agenda:
         select = int(input('Indique el item [1..n] de la reunión que desea expandir.\n Ingrese 0 para salir '))
         if select != 0:
             self.reuniones[select-1].listar()
-            #Esto es para eliminar reunion
+            # Esto es para eliminar reunion
             return select-1
         else:
             return -1
@@ -97,7 +98,7 @@ class Agenda:
         flag = False
         while not flag:
             try:
-                year, month, day, hour, min = map(int, input("Ingrese fecha y hora de inicio, en formato YYYY MM DD hh mm, separado por espacio").split())
+                year, month, day, hour, min = map(int, input("Ingrese fecha y hora de inicio, en formato YYYY MM DD hh mm, separado por espacio ").split())
                 date = datetime.datetime(year, month, day, hour, min)
                 flag = True
             except ValueError:
@@ -109,14 +110,14 @@ class Agenda:
         if not self.checkOverlap(r):
             self.reuniones.append(r)
             self.indexReunion += 1
-            self.usuario.pendientes +=1
+            self.usuario.pendientes += 1
             self.usuario.total += 1
 
     def checkOverlap(self, r):
         overlap = []
         horaFin = r.fechaHora+datetime.timedelta(minutes=r.duracion)
         for re in self.reuniones:
-            horaFin2 = re.fechaHora+datetime.timedelta(minutes = re.duracion)
+            horaFin2 = re.fechaHora+datetime.timedelta(minutes=re.duracion)
             if r.fechaHora.date() == re.fechaHora.date() and ((r.fechaHora< re.fechaHora < horaFin) or (re.fechaHora < r.fechaHora < horaFin2)):
                 overlap.append(re)
         if overlap != []:
@@ -143,31 +144,31 @@ class Agenda:
         try:
             with open(filename, 'rb') as loadfile:
                 self.usuario = pickle.load(loadfile)
-                self.indexReunion = self.usuario.total 
+                self.indexReunion = self.usuario.total
         except FileNotFoundError:
-            self.usuario = ''
             self.create_user()
 
     def create_user(self):
-        while (self.usuario == ''):
+        while True:
             name = input("¿Quién usará está agenda? ")
             if name != '':
                 self.usuario = Usuario(name)
                 print(f' Enlace realizado, bienvenido {self.usuario}')
+                break
             else:
                 print("No se acepta vacío, indique un nombre de usuario")
 
     def modify(self, r, overlap):
         print("===Informe===\n")
         print(f"Reunión por cargar Nro {r.nroR}\n"
-            f"De fecha {r.fechaHora.strftime('%d %B %Y %H %M')} y duración {r.dur} minutos\n"
+            f"De fecha {r.fechaHora.strftime('%d %B %Y %H %M')} y duración {r.duracion} minutos\n"
             f"Presenta incompatibilidades con reuniones pendientes\n")
         print("A continuación se detallarán los choques...\n")
         for re in overlap:
             print(f"Reunión {re.nroR}\n"
                   f"En el horario {re.fechaHora.strftime('%H %M')}, hasta las {(re.fechaHora+datetime.timedelta(minutes=re.duracion)).strftime('%H %M')}\n")
         print("Indique si modificará fecha, horario o duración de la reunión\n")
-        opt = input('Fecha | Hora | Duracion| Predeterminado: Fecha')
+        opt = input('Fecha | Hora | Duracion| Predeterminado: Fecha ')
         components = r.fechaHora.timetuple()
         match opt:
             case 'Fecha':
@@ -192,7 +193,7 @@ class Agenda:
         print("Cambio guardado, realizando verificación...\n")
         clear()
         self.checkOverlap(r)
-    
+
     def modifyAssistance(self):
         for re in self.reuniones:
             if re.pendiente:
@@ -204,6 +205,8 @@ class Agenda:
                 else:
                     re.cambiarAsistencia()
                     re.listar()
+                    self.usuario.pendientes -= 1
+                    self.usuario.asistidas += 1
                     time.sleep(3)
                     clear()
             else:
@@ -212,14 +215,20 @@ class Agenda:
     def deleteReunion(self):
         index = self.showAndSelect()
         if index != -1:
-            print("Eliminando reunión...")
-            self.reuniones.pop(index)
-            print("Eliminación exitosa")
+            confirm = input("Como ultima oportunidad, ¿Desea eliminar esta reunion? [Y|N] ")
+            if confirm == 'Y':
+                print("Eliminando reunión...")
+                self.reuniones.pop(index)
+                print("Eliminación exitosa")
+            else:
+                print("Cancelando eliminación...")
         else:
             print("Cancelando eliminación...")
 
+
 def clear():
     os.system('clear')
+
 
 def menu():
     userFile = 'userLog.pk1'
@@ -230,13 +239,14 @@ def menu():
 
     while True:
         clear()
-        print(f"AGENDA PERSONAL de {meetlog.usuario}\n"
-              "\t1.Agregar Reunión\n"
+        print(f"AGENDA PERSONAL de {meetlog.usuario.identidad}\n")
+        meetlog.usuario.estadistica()
+        print("\t1.Agregar Reunión\n"
               "\t2.Mostrar Reuniones\n"
               "\t3.Actualizar Asistencia\n"
               "\t4.Eliminar Reuniones\n"
               "\t5.Salir\n")
-        
+
         opt = input("Ingrese opcion... ")
         match opt:
             case '1':
@@ -248,15 +258,16 @@ def menu():
                 meetlog.modifyAssistance()
             case '4':
                 meetlog.deleteReunion()
-                time.sleep(10)
+                time.sleep(3.5)
             case '5':
                 print("Guardando información...")
                 meetlog.save_reunion(dataFile)
                 meetlog.save_user(userFile)
-                time.sleep(2.5)
+                time.sleep(0.5)
                 return 'Finalizando agenda...'
             case _:
                 input("Opción no reconocida...Presione ENTER para regresar ")
+
 
 if __name__ == '__main__':
     menu()
