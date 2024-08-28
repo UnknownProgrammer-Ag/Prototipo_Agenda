@@ -11,13 +11,10 @@
    - modalidad --> Formato de la reunión (Presencial | Virtual)
    - detalle --> Información opcional dependiente del formato
    - participantes --> Listado de participantes de la reunión 
-   - tema --> Temática de la reunión 
+   - tema --> Temática de la reunión
+   - fechaHora --> Atributo que contiene ambos, fecha y hora de inicio de la reunión
    - duración --> Total de minutos de duración transformados en hh:mm
-   - horaI --> La hora de inicio de la duración en formato hh:mm
-   - fecha --> Día en que se va a dar la reunión en formato YY.MM.DD
    - pendiente --> Estado de la reunión, en formato binario, representando la asistencia del usuario
 # Clase: Usuario
 ### Atributos
-   - usuario --> Representa el nombre de usuario
-   - reuniones --> Colección de objetos 'Reunión'
-   - cant --> Cuantifica el total de reuniones existentes para el usuario, asistidas o no.
+
