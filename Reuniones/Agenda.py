@@ -2,6 +2,9 @@ import os
 import pickle
 import datetime
 import time
+from pyfiglet import Figlet
+from colorama import Fore, init
+init(autoreset=True)
 
 
 class Reunion:
@@ -50,11 +53,12 @@ class Usuario:
         self.total = 0
 
     def estadistica(self):
-        print("============================")
+        print("====================================")
         print(f'Reuniones Total: {self.total}')
         print(f'Reuniones Asistidas: {self.asistidas}')
         print(f'Reuniones Pendientes: {self.pendientes}')
-        print("============================\n")
+        print("===================================\n")
+
 
 class Agenda:
     def __init__(self):
@@ -62,22 +66,50 @@ class Agenda:
         self.reuniones = []
         self.indexReunion = 0
 
-    def showAndSelect(self):
-        for (i, re) in enumerate(self.reuniones):
-            print(f"{i+1}. Reunión {re.nroR}| {re.modalidad}| Sobre {re.tema}")
-
-        select = int(input('Indique el item [1..n] de la reunión que desea expandir.\n Ingrese 0 para salir '))
-        if select != 0:
-            self.reuniones[select-1].listar()
-            # Esto es para eliminar reunion
-            return select-1
+    def showAndSelect(self, arg):
+        if arg == '':
+            for (i, re) in enumerate(self.reuniones):
+                print(f"{i+1}. Reunión {re.nroR}| {re.modalidad}| Sobre {re.tema}")
+            select = int(input('Indique el item [1..n] de la reunión que desea expandir.\n Ingrese 0 para salir '))
+            if select != 0:
+                self.reuniones[select-1].listar()
+                # Esto es para eliminar reunion
+                choosed = self.reuniones[select-1]
+                return choosed
+            else:
+                return -1
+        elif isinstance(arg, (datetime.date)):
+            print(f"Filtrado por: {arg} ")
+            filter = [for re in self.reuniones if re.fechaHora.date()==arg]
+            for (i, re) in enumerate(filter):
+                print(f"{i+1}. Reunión {re.nroR}| {re.modalidad}| Sobre{re.tema}")
+            select = int(input('Indique el item [1..n] de la reunión que desea expandir.\n Ingrese 0 para salir '))
+            if select != 0:
+                filter[select-1].listar()
+                # Esto es para eliminar reunion
+                choosed = filter[select-1]
+                return choosed
+            else:
+                return -1
         else:
-            return -1
+            filter = [for re in self.reuniones if re.asistencia == arg]
+            for (i, re) in enumerate(filter):
+                print(f"{i+1}. Reunión {re.nroR}| {re.modalidad}| Sobre{re.tema}")
+            select = int(input('Indique el item [1..n] de la reunión que desea expandir.\n Ingrese 0 para salir '))
+            if select != 0:
+                filter[select-1].listar()
+                # Esto es para eliminar reunion
+                choosed = filter[select-1]
+                return choosed
+            else:
+                return -1
 
+        
     def cargar_reunion(self):
-        print("=====================")
-        print(" CREADOR DE REUNION ")
-        print("=====================")
+        print(Fore.GREEN+"===========================================================================")
+        f = Figlet(font="doom")
+        print(Fore.GREEN+f.renderText("CREADOR DE REUNION "))
+        print(Fore.GREEN+"===========================================================================")
         mod = input("Indique modalidad de la reunión [ Presencial | Virtual ] ")
         if (mod == 'Presencial' or mod == 'presencial'):
             print("Indique una breve indicación de lugar [Casa de X] ó una breve dirección [Calle X Piso X] ")
@@ -159,7 +191,8 @@ class Agenda:
                 print("No se acepta vacío, indique un nombre de usuario")
 
     def modify(self, r, overlap):
-        print("===Informe===\n")
+        f = Figlet(font='slant')
+        print(Fore.ORANGE+f.renderText("===Informe==="))
         print(f"Reunión por cargar Nro {r.nroR}\n"
             f"De fecha {r.fechaHora.strftime('%d %B %Y %H %M')} y duración {r.duracion} minutos\n"
             f"Presenta incompatibilidades con reuniones pendientes\n")
@@ -212,13 +245,13 @@ class Agenda:
             else:
                 pass
 
-    def deleteReunion(self):
-        index = self.showAndSelect()
-        if index != -1:
+    def deleteReunion(self, arg):
+        deleted = self.showAndSelect(arg)
+        if deleted != -1:
             confirm = input("Como ultima oportunidad, ¿Desea eliminar esta reunion? [Y|N] ")
             if confirm == 'Y':
                 print("Eliminando reunión...")
-                self.reuniones.pop(index)
+                self.reuniones.remove(deleted)
                 print("Eliminación exitosa")
             else:
                 print("Cancelando eliminación...")
@@ -239,19 +272,22 @@ def menu():
 
     while True:
         clear()
-        print(f"AGENDA PERSONAL de {meetlog.usuario.identidad}\n")
+        f = Figlet(font='slant')
+        print(Fore.BLUE+f.renderText("AGENDA PERSONAL de"))
+        print(Fore.BLUE+f.renderText(f"{meetlog.usuario.identidad}"))
         meetlog.usuario.estadistica()
-        print("\t1.Agregar Reunión\n"
-              "\t2.Mostrar Reuniones\n"
-              "\t3.Actualizar Asistencia\n"
-              "\t4.Eliminar Reuniones\n"
-              "\t5.Salir\n")
+        print("\t\t1.Agregar Reunión\n"
+              "\t\t2.Mostrar Reuniones\n"
+              "\t\t3.Actualizar Asistencia\n"
+              "\t\t4.Eliminar Reuniones\n"
+              "\t\t5.Salir\n")
 
         opt = input("Ingrese opcion... ")
         match opt:
             case '1':
                 meetlog.cargar_reunion()
             case '2':
+                
                 meetlog.showAndSelect()
                 input('Enter para continuar...')
             case '3':
