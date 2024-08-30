@@ -66,45 +66,31 @@ class Agenda:
         self.reuniones = []
         self.indexReunion = 0
 
-    def showAndSelect(self, arg):
+    def showAndSelect(reunion):
+        for (i, re) in enumerate(reunion):
+            print(f"{i+1}. Reunión {re.nroR} | {re.modalidad} | Sobre {re.tema}")
+        select = int(input('Indique el item [1..n] de la reunión que desea expandir.\n Ingrese 0 para salir '))
+        if select != 0:
+            reunion[select-1].listar()
+            # Esto es para eliminar_reunion
+            choosed = reunion[select-1]
+            return choosed
+        else:
+            return -1
+
+    def manageReunion(self, arg):
         if arg == '':
-            for (i, re) in enumerate(self.reuniones):
-                print(f"{i+1}. Reunión {re.nroR}| {re.modalidad}| Sobre {re.tema}")
-            select = int(input('Indique el item [1..n] de la reunión que desea expandir.\n Ingrese 0 para salir '))
-            if select != 0:
-                self.reuniones[select-1].listar()
-                # Esto es para eliminar reunion
-                choosed = self.reuniones[select-1]
-                return choosed
-            else:
-                return -1
+            sel = showAndSelect(self.reunion)
         elif isinstance(arg, (datetime.date)):
             print(f"Filtrado por: {arg} ")
             filter = [for re in self.reuniones if re.fechaHora.date()==arg]
-            for (i, re) in enumerate(filter):
-                print(f"{i+1}. Reunión {re.nroR}| {re.modalidad}| Sobre{re.tema}")
-            select = int(input('Indique el item [1..n] de la reunión que desea expandir.\n Ingrese 0 para salir '))
-            if select != 0:
-                filter[select-1].listar()
-                # Esto es para eliminar reunion
-                choosed = filter[select-1]
-                return choosed
-            else:
-                return -1
+            sel = showAndSelect(filter)
         else:
+            print(f"Filtrado por: {arg} ")
             filter = [for re in self.reuniones if re.asistencia == arg]
-            for (i, re) in enumerate(filter):
-                print(f"{i+1}. Reunión {re.nroR}| {re.modalidad}| Sobre{re.tema}")
-            select = int(input('Indique el item [1..n] de la reunión que desea expandir.\n Ingrese 0 para salir '))
-            if select != 0:
-                filter[select-1].listar()
-                # Esto es para eliminar reunion
-                choosed = filter[select-1]
-                return choosed
-            else:
-                return -1
+            sel = showAndSelect(filter)
+        return sel
 
-        
     def cargar_reunion(self):
         print(Fore.GREEN+"===========================================================================")
         f = Figlet(font="doom")
@@ -246,7 +232,7 @@ class Agenda:
                 pass
 
     def deleteReunion(self, arg):
-        deleted = self.showAndSelect(arg)
+        deleted = self.manageReunion(arg)
         if deleted != -1:
             confirm = input("Como ultima oportunidad, ¿Desea eliminar esta reunion? [Y|N] ")
             if confirm == 'Y':
@@ -287,13 +273,44 @@ def menu():
             case '1':
                 meetlog.cargar_reunion()
             case '2':
-                
-                meetlog.showAndSelect()
+                print("Puedes ver todas, filtrar por fecha (YYYY MM DD) o por asistencia (Asistida | Pendiente) ")
+                inp = input("Ingrese la fecha o la asistencia en el formato mostrado o Enter para no filtrar... ")
+                if inp == 'Asistida':
+                    filt = False
+                elif inp == 'Pendiente':
+                    filt = True
+                elif inp != '':
+                    try:
+                        year, month, day = map(int, inp.split())
+                        filt = datetime.datetime(year, month, day, 0, 0)
+                    except ValueError as e:
+                        print("Fecha Inválida")
+                        filt = ""
+                        raise e
+                else:
+                    filt = inp      
+                meetlog.manageReunion(filt)
                 input('Enter para continuar...')
             case '3':
                 meetlog.modifyAssistance()
             case '4':
-                meetlog.deleteReunion()
+                print("Puedes ver todas, filtrar por fecha (YYYY MM DD) o por asistencia (Asistida | Pendiente) ")
+                inp = input("Ingrese la fecha o la asistencia en el formato mostrado o Enter para no filtrar... ")
+                if inp == 'Asistida':
+                    filt = False
+                elif inp == 'Pendiente':
+                    filt = True
+                elif inp != '':
+                    try:
+                        year, month, day = map(int, inp.split())
+                        filt = datetime.datetime(year, month, day, 0, 0)
+                    except ValueError as e:
+                        print("Fecha Inválida")
+                        filt = ""
+                        raise e
+                else:
+                    filt = inp 
+                meetlog.deleteReunion(filt)
                 time.sleep(3.5)
             case '5':
                 print("Guardando información...")
