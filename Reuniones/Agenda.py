@@ -22,18 +22,20 @@ class Reunion:
         horas = self.duracion // 60
         minutos = self.duracion % 60
 
-        print(f"=======\nReunión {self.nroR}\n=======\n"
-        f"Modalidad: {self.modalidad}\n"
-        f"Detalle: {self.detalle}\n"
-        f"Tema: {self.tema}\n"
-        f"Participantes: {self.participantes}\n"
-        f"Fecha: {self.fechaHora.strftime('%A %d %B %Y')}\n"
-        f"Hora de Inicio: {self.fechaHora.time()}\n"
-        f"Duración: {horas} hr : {minutos} min\n")
+        print("=======\nReunión "+Fore.LIGHTBLUE_EX+f"{self.nroR}"+Fore.RESET+"\n=======\n"
+        "Modalidad: "+Fore.LIGHTBLUE_EX+f"{self.modalidad}\n"+Fore.RESET+
+        "Detalle: "+Fore.LIGHTBLUE_EX+f"{self.detalle}\n"+Fore.RESET+
+        "Tema: "+Fore.LIGHTBLUE_EX+f"{self.tema}\n"+Fore.RESET+
+        "Participantes: "+Fore.LIGHTBLUE_EX+f"{self.participantes}\n"+Fore.RESET+
+        "Fecha: "+Fore.LIGHTBLUE_EX+f"{self.fechaHora.strftime('%A %d %B %Y')}\n"+Fore.RESET+
+        "Hora de Inicio: "+Fore.LIGHTBLUE_EX+f"{self.fechaHora.time()}\n"+Fore.RESET+
+        "Duración: "+Fore.LIGHTBLUE_EX+f"{horas} hr : {minutos} min")
         if self.pendiente:
-            print('Estado: PENDIENTE')
+            print('Estado: '+Fore.LIGHTBLUE_EX+'PENDIENTE')
         else:
-            print('Estado: ASISTIDO')
+            print('Estado: '+Fore.LIGHTBLUE_EX+'ASISTIDO')
+        Fore.RESET
+
 
     def cambiarFecha(self, year, month, day, hour, min):
         self.fechaHora = datetime.datetime(year, month, day, hour, min)
@@ -54,9 +56,9 @@ class Usuario:
 
     def estadistica(self):
         print("====================================")
-        print(f'Reuniones Total: {self.total}')
-        print(f'Reuniones Asistidas: {self.asistidas}')
-        print(f'Reuniones Pendientes: {self.pendientes}')
+        print('Reuniones Total: '+ Fore.CYAN+ f'{self.total}')
+        print('Reuniones Asistidas: '+ Fore.CYAN+f'{self.asistidas}')
+        print('Reuniones Pendientes: '+ Fore.CYAN+f'{self.pendientes}')
         print("===================================\n")
 
 
@@ -66,9 +68,9 @@ class Agenda:
         self.reuniones = []
         self.indexReunion = 0
 
-    def showAndSelect(reunion):
+    def showAndSelect(self, reunion):
         for (i, re) in enumerate(reunion):
-            print(f"{i+1}. Reunión {re.nroR} | {re.modalidad} | Sobre {re.tema}")
+            print(f"{i+1}. Reunión "+Fore.BLUE+f"{re.nroR}"+Fore.RESET+f"| {re.modalidad} acerca de "+Fore.BLUE+f"{re.tema}")
         select = int(input('Indique el item [1..n] de la reunión que desea expandir.\n Ingrese 0 para salir '))
         if select != 0:
             reunion[select-1].listar()
@@ -80,48 +82,49 @@ class Agenda:
 
     def manageReunion(self, arg):
         if arg == '':
-            sel = showAndSelect(self.reunion)
+            sel = self.showAndSelect(self.reuniones)
         elif isinstance(arg, (datetime.date)):
-            print(f"Filtrado por: {arg} ")
-            filter = [for re in self.reuniones if re.fechaHora.date()==arg]
-            sel = showAndSelect(filter)
+            print(f"Filtrado por: {arg.date()} ")
+            filter = [re for re in self.reuniones if re.fechaHora.date() == arg.date()]
+            sel = self.showAndSelect(filter)
         else:
             print(f"Filtrado por: {arg} ")
-            filter = [for re in self.reuniones if re.asistencia == arg]
-            sel = showAndSelect(filter)
+            filter = [re for re in self.reuniones if (re.pendiente == arg)]
+            sel = self.showAndSelect(filter)
         return sel
 
     def cargar_reunion(self):
+        clear()
         print(Fore.GREEN+"===========================================================================")
         f = Figlet(font="doom")
         print(Fore.GREEN+f.renderText("CREADOR DE REUNION "))
         print(Fore.GREEN+"===========================================================================")
-        mod = input("Indique modalidad de la reunión [ Presencial | Virtual ] ")
-        if (mod == 'Presencial' or mod == 'presencial'):
-            print("Indique una breve indicación de lugar [Casa de X] ó una breve dirección [Calle X Piso X] ")
+        mod = input("Indique modalidad de la reunión [ Presencial | Virtual ] "+Fore.LIGHTGREEN_EX)
+        if mod.lower() == 'presencial':
+            print(Fore.RESET+"Indique una breve indicación de lugar [Casa de X] ó una breve dirección [Calle X Piso X] ")
         else:
-            print("Indique el código de la reunión [Presione Enter para dejar en blanco] ")
-        det = input()
+            print(Fore.RESET+"Indique el código de la reunión [Presione Enter para dejar en blanco] ")
+        det = input(Fore.LIGHTGREEN_EX)
         part = []
         while True:
-            item = input("Indique el nombre|apodo|apellido del participante ")
+            item = input(Fore.RESET+"Indique el nombre|apodo|apellido del participante "+Fore.LIGHTGREEN_EX)
             part.append(item)
-            add = input("¿Desea agregar más miembros? [ Y|N ] ")
-            if add == 'N':
+            add = input(Fore.RESET+"¿Desea agregar más miembros? [ Y|N ]\nPor defecto (Y) "+Fore.LIGHTGREEN_EX)
+            if add.lower() == 'n':
                 break
-        tem = input("Indique el tema de la reunión ")
-        dur = int(input("Indique la duración en minutos de la reunión (estimada en minutos) "))
+        tem = input(Fore.RESET+"Indique el tema de la reunión "+Fore.LIGHTGREEN_EX)
+        dur = int(input(Fore.RESET+"Indique la duración en minutos de la reunión (estimada en minutos) "+Fore.LIGHTGREEN_EX))
         # --------
         # Carga de fecha usando datetime y un catch de error
         flag = False
         while not flag:
             try:
-                year, month, day, hour, min = map(int, input("Ingrese fecha y hora de inicio, en formato YYYY MM DD hh mm, separado por espacio ").split())
+                year, month, day, hour, min = map(int, input(Fore.RESET+"Ingrese fecha y hora de inicio, en formato YYYY MM DD hh mm, separado por espacio "+Fore.LIGHTGREEN_EX).split())
                 date = datetime.datetime(year, month, day, hour, min)
                 flag = True
             except ValueError:
                 flag = False
-                print("Ingrese una fecha válida")
+                print(Fore.RED+"Ingrese una fecha válida")
         # Cargar de reunión e incremento de index
         id = self.indexReunion
         r = Reunion(id, mod, det, part, tem, date, dur)
@@ -168,48 +171,48 @@ class Agenda:
 
     def create_user(self):
         while True:
-            name = input("¿Quién usará está agenda? ")
+            name = input("¿Quién usará está agenda? "+Fore.BLUE)
             if name != '':
                 self.usuario = Usuario(name)
-                print(f' Enlace realizado, bienvenido {self.usuario}')
+                print(Fore.LIGHTGREEN_EX+f' Enlace realizado, bienvenido {self.usuario}')
                 break
             else:
-                print("No se acepta vacío, indique un nombre de usuario")
+                print(Fore.RED+"No se acepta vacío, indique un nombre de usuario")
 
     def modify(self, r, overlap):
         f = Figlet(font='slant')
-        print(Fore.ORANGE+f.renderText("===Informe==="))
-        print(f"Reunión por cargar Nro {r.nroR}\n"
-            f"De fecha {r.fechaHora.strftime('%d %B %Y %H %M')} y duración {r.duracion} minutos\n"
-            f"Presenta incompatibilidades con reuniones pendientes\n")
+        print(Fore.YELLOW+f.renderText("<<<Informe>>>"))
+        print("Reunión por cargar: "+Fore.LIGHTMAGENTA_EX+f"Nro {r.nroR}\n"+Fore.RESET+
+            "Con fecha para el "+Fore.LIGHTMAGENTA_EX+f"{r.fechaHora.strftime('%d %B %Y %H:%M')}"+Fore.RESET+" y duración de "+Fore.LIGHTMAGENTA_EX+f"{r.duracion} minutos\n"
+            +Fore.LIGHTRED_EX+"Presenta incompatibilidades con reuniones existentes\n")
         print("A continuación se detallarán los choques...\n")
         for re in overlap:
-            print(f"Reunión {re.nroR}\n"
-                  f"En el horario {re.fechaHora.strftime('%H %M')}, hasta las {(re.fechaHora+datetime.timedelta(minutes=re.duracion)).strftime('%H %M')}\n")
+            print("Reunión "+Fore.GREEN+f"{re.nroR}\n"
+                +Fore.RESET+"Que va de las "+Fore.GREEN+f"{re.fechaHora.strftime('%H:%M')}"+Fore.RESET+" hasta las "+Fore.GREEN+f"{(re.fechaHora+datetime.timedelta(minutes=re.duracion)).strftime('%H:%M')}\n")
         print("Indique si modificará fecha, horario o duración de la reunión\n")
-        opt = input('Fecha | Hora | Duracion| Predeterminado: Fecha ')
+        opt = input('Fecha | Hora | Duracion| Predeterminado: Fecha '+Fore.BLUE)
         components = r.fechaHora.timetuple()
         match opt:
             case 'Fecha':
                 hor = components[3]
                 min = components[4]
-                year, month, day = map(int, input("Fecha nueva ").split())
+                year, month, day = map(int, input("Fecha nueva "+Fore.BLUE).split())
                 r.cambiarFecha(year, month, day, hor, min)
             case 'Hora':
                 year = components[0]
                 month = components[1]
                 day = components[2]
-                hor, min = map(int, input("Hora de inicio nueva ").split())
+                hor, min = map(int, input("Hora de inicio nueva "+Fore.BLUE).split())
                 r.cambiarFecha(year, month, day, hor, min)
             case 'Duracion':
-                dur = int(input("Duración nueva "))
+                dur = int(input("Duración nueva "+Fore.BLUE))
                 r.cambiarDuracion(dur)
             case _:
                 hor = components[3]
                 min = components[4]
-                year, month, day = map(int, input("Fecha nueva ").split())
+                year, month, day = map(int, input("Fecha nueva "+Fore.BLUE).split())
                 r.cambiarFecha(year, month, day, hor, min)
-        print("Cambio guardado, realizando verificación...\n")
+        print(Fore.RESET+"Cambio guardado, realizando verificación...\n")
         clear()
         self.checkOverlap(r)
 
@@ -217,8 +220,8 @@ class Agenda:
         for re in self.reuniones:
             if re.pendiente:
                 re.listar()
-                opt = input("¿Asistió a la reunión? [Y|N] ")
-                if opt == 'N':
+                opt = input("¿Asistió a la reunión? [Y|N]\nPor defecto (Y)")
+                if opt.lower() == 'n':
                     pass
                     clear()
                 else:
@@ -234,15 +237,20 @@ class Agenda:
     def deleteReunion(self, arg):
         deleted = self.manageReunion(arg)
         if deleted != -1:
-            confirm = input("Como ultima oportunidad, ¿Desea eliminar esta reunion? [Y|N] ")
-            if confirm == 'Y':
-                print("Eliminando reunión...")
+            confirm = input("Como ultima oportunidad, ¿Desea eliminar esta reunion? [Y|N]\nPor Defecto (N) "+Fore.BLUE)
+            if confirm.lower() == 'y':
+                print(Fore.RED+"Eliminando reunión...")
+                if deleted.pendiente:
+                    self.usuario.pendientes -= 1
+                else:
+                    self.usuario.asistidas -= 1
+                self.usuario.total -= 1
                 self.reuniones.remove(deleted)
-                print("Eliminación exitosa")
+                print(Fore.LIGHTGREEN_EX+"Eliminación exitosa")
             else:
-                print("Cancelando eliminación...")
+                print(Fore.MAGENTA+"Cancelando eliminación...")
         else:
-            print("Cancelando eliminación...")
+            print(Fore.MAGENTA+"Cancelando eliminación...")
 
 
 def clear():
@@ -262,6 +270,7 @@ def menu():
         print(Fore.BLUE+f.renderText("AGENDA PERSONAL de"))
         print(Fore.BLUE+f.renderText(f"{meetlog.usuario.identidad}"))
         meetlog.usuario.estadistica()
+        Fore.RESET
         print("\t\t1.Agregar Reunión\n"
               "\t\t2.Mostrar Reuniones\n"
               "\t\t3.Actualizar Asistencia\n"
@@ -273,53 +282,53 @@ def menu():
             case '1':
                 meetlog.cargar_reunion()
             case '2':
-                print("Puedes ver todas, filtrar por fecha (YYYY MM DD) o por asistencia (Asistida | Pendiente) ")
+                print("Puedes ver todas, filtrar por fecha "+Fore.LIGHTCYAN_EX+"(YYYY MM DD) "+Fore.RESET+"o por asistencia"+Fore.LIGHTCYAN_EX+" (Asistida | Pendiente)")
                 inp = input("Ingrese la fecha o la asistencia en el formato mostrado o Enter para no filtrar... ")
-                if inp == 'Asistida':
+                if inp.lower() == 'asistida':
                     filt = False
-                elif inp == 'Pendiente':
+                elif inp.lower() == 'pendiente':
                     filt = True
                 elif inp != '':
                     try:
                         year, month, day = map(int, inp.split())
                         filt = datetime.datetime(year, month, day, 0, 0)
                     except ValueError as e:
-                        print("Fecha Inválida")
+                        print(Fore.RED+"Fecha Inválida")
                         filt = ""
                         raise e
                 else:
-                    filt = inp      
+                    filt = inp
                 meetlog.manageReunion(filt)
                 input('Enter para continuar...')
             case '3':
                 meetlog.modifyAssistance()
             case '4':
-                print("Puedes ver todas, filtrar por fecha (YYYY MM DD) o por asistencia (Asistida | Pendiente) ")
+                print("Puedes ver todas, filtrar por fecha "+Fore.LIGHTCYAN_EX+"(YYYY MM DD)"+Fore.RESET+"o por asistencia "+Fore.LIGHTCYAN_EX+"(Asistida | Pendiente) ")
                 inp = input("Ingrese la fecha o la asistencia en el formato mostrado o Enter para no filtrar... ")
-                if inp == 'Asistida':
+                if inp.lower() == 'asistida':
                     filt = False
-                elif inp == 'Pendiente':
+                elif inp.lower() == 'pendiente':
                     filt = True
                 elif inp != '':
                     try:
                         year, month, day = map(int, inp.split())
                         filt = datetime.datetime(year, month, day, 0, 0)
                     except ValueError as e:
-                        print("Fecha Inválida")
+                        print(Fore.RED+"Fecha Inválida")
                         filt = ""
                         raise e
                 else:
-                    filt = inp 
+                    filt = inp
                 meetlog.deleteReunion(filt)
                 time.sleep(3.5)
             case '5':
-                print("Guardando información...")
+                print(Fore.LIGHTGREEN_EX+"Guardando información...")
                 meetlog.save_reunion(dataFile)
                 meetlog.save_user(userFile)
                 time.sleep(0.5)
                 return 'Finalizando agenda...'
             case _:
-                input("Opción no reconocida...Presione ENTER para regresar ")
+                input(Fore.LIGHTRED_EX+"Opción no reconocida...Presione ENTER para regresar ")
 
 
 if __name__ == '__main__':

@@ -17,4 +17,16 @@
    - pendiente --> Estado de la reunión, en formato binario, representando la asistencia del usuario
 # Clase: Usuario
 ### Atributos
-
+   - identidad --> Almacena el nombre de usuario
+   - pendientes --> Almacena la cantidad de reuniones pendientes existentes
+   - asistidas --> Almacena la cantidad de reuniones ya asistidas existentes
+   - total --> Almacena la cantidad total de reuniones (asistidas + pendientes)
+# Clase: Agenda
+   - La agenda es la clase principal que esta compuesta de N instancias de Reunion y 1 instancia de Usuario.
+   - La agenda puede mostrar todas las reuniones existentes para el usuario, filtradas por fecha u asistencia.
+   - La agenda puede guardar y cargar el usuario y las reuniones de una sesión anterior.
+   - La agenda puede cargar una reunión nueva, modificar su asistencia, modificar su fecha, duración u hora si existe solapamientos, y eliminar una instancia de Reunión.
+### Atributos
+   - usuario --> Almacena la instancia de Usuario
+   - reuniones --> Almacena de 0..n instancias de Reunion
+   - indexReunion --> Contador que identifica univocamente a cada instancia nueva
