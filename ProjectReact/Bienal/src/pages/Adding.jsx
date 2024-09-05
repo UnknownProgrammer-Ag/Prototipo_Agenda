@@ -1,4 +1,8 @@
-        
+import { useState } from 'react';
+import {ESCULTURAS} from '../utils/DataEsculturas';
+import {Link} from '../components/Link';
+
+
 export default function FormPage(){
 
     const [escultura, setEscultura]=useState(ESCULTURAS);
@@ -8,13 +12,13 @@ export default function FormPage(){
 		const handleSubmit = (e) => {
         e.preventDefault();
         const newEscultura = {
-            id: esculturas.length,
+            id: escultura.length,
             name: name,
             imageId: imageId
         };
         // Usando propagacion de array, actualizamos de manera recomendada el array y agregamos el nuevo elemento
-       setEsculturas((prevEsculturas) =>
-        [...prevEsculturas,
+       setEscultura((prevEscultura) =>
+        [...prevEscultura,
         newEscultura
        ]);
 

@@ -1,4 +1,4 @@
-export const esculturas = [{
+export const ESCULTURAS = [{
     id: 0,
     name: 'Siesta Natura',
     imageId: 'Xm6oUeq'

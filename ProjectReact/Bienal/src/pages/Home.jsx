@@ -15,6 +15,7 @@ export default function HomePage(){
             </ul>
             <div><Link to='/about'>Sobre Nosotros</Link></div>
             <div><Link to='/esculturas'>Galeria de Esculturas</Link></div>
+            <div><Link to='/adding'> Cargar nueva Escultura</Link></div>
         </>
     )
     }

@@ -1,4 +1,4 @@
-import { esculturas } from "../utils/DataEsculturas.js"
+import { ESCULTURAS } from "../utils/DataEsculturas.js"
 import {getImageUrl} from "../utils/getImageUrl.js"
 import { Link } from "../components/Link.jsx"
 
@@ -12,7 +12,7 @@ function Sculpture({item}){
 }
 
 export default function GalleryPage(){
-const listItems = esculturas.map(sculp =>
+const listItems = ESCULTURAS.map(sculp =>
     <Sculpture key={sculp.id} item = {sculp}/>
 );
 return (
