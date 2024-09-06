@@ -18,7 +18,8 @@ Eventos --> Integrado por votos y comentarios específicos.
 Bienal --> Integrada por votos y comentarios generales.
 
 >[NOTE] ¿ Responsabilidad de los organizadores ?
-> Los eventos deben ser registrados al igual que los escultores.
+ii> Los eventos deben ser registrados al igual que los escultores.
+Footer de la landing page --> Administracion
 
 # Requerimientos Funcionales
 ## Registro
@@ -48,4 +49,16 @@ Bienal --> Integrada por votos y comentarios generales.
    - Validación de Votos (Captcha es la opción más sencilla. ¿ Métodos Externos ?)
 ## Performance
    - Optimización de Imágenes y tiempo de respuesta: Seguir buenas prácticas en FrontEnd para reducir los ms
+
+
+# Home or Landing Page
+Should show events carrousel preview (description, date, etc)
+Mostrar una historia de la Bienal
+Talleres
+Etc
+NavBar (A las otras paginas)
+
+# Galery Escultores
+# Galery Esculturas
+
 
