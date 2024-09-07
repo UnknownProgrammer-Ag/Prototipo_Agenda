@@ -1,4 +1,8 @@
-from random import randrange
+from random import randrange, choice
+
+
+def disparo(objetivo):
+    objetivo.vida -= (1-objetivo.reduccion)
 
 
 class Escudo:
@@ -14,10 +18,10 @@ class Unidad:
         self.reduccion = 0
 
     def generarEscudo(self, escudo):
-        self.reducción = escudo.proteccion / 100
+        self.reduccion = escudo.proteccion / 100
 
-    def disparo(self, objetivo):
-        objetivo.vida -= (1-objetivo.reduccion)
+    def disparar(self, objetivo):
+        disparo(objetivo)
 
     def vivo(self):
         if self.vida == 0:
@@ -34,22 +38,30 @@ class Tanques(Unidad):
 
 class Buques(Unidad):
     def __init__(self):
-        self.vida = 3}
+        self.vida = 3
         self.tipo = "buque"
 
 
 def main():
     battleRoyale = []
-    while True:
-        opt = input("Quiere colocar un escudo? (N) Y|N ")
+    types = ['s', 'b', 't']
+    armor = ['Y', 'N']
+    turns = 0
+    size = -1
+    while size < 0 or size >= 1000:
+        size = int(input("¿Cuántas unidades desea liberar? Max 1000 "))
+    print(f"A continuación se generarán {size} unidades aleatorias compuestas por soldados, tanques y buques")
+    print("Las unidades aleatoriamente tendrán puntos de escudo o no, permitiendoles reducir el daño recibido")
+    for _ in range(size):
+        opt = choice(armor)
         if opt == 'Y':
             prot = randrange(1, 100)
         else:
             prot = 0
 
         shield = Escudo(prot)
-        choice = input("Soldado (s), Tanque (t), Buque(b)?")
-        match choice:
+        unidades = choice(types)
+        match unidades:
             case 's':
                 sold = Unidad()
                 sold.generarEscudo(shield)
@@ -62,26 +74,27 @@ def main():
                 ship = Buques()
                 ship.generarEscudo(shield)
                 battleRoyale.append(ship)
-        exit = input(" Seguir (Y) N")
-        if exit == "N":
-            break
-
     # Guerra
-
-    while battleRoyale.len > 1:
-        id1 = randrange(0, battleRoyale.len)
-        id2 = randrange(0, battleRoyale.len)
+    print("GUERRA")
+    while (len(battleRoyale)) > 1:
+        id1 = randrange(0, len(battleRoyale)-1)
+        id2 = randrange(0, len(battleRoyale)-1)
+        unit1 = battleRoyale[id1]
+        unit2 = battleRoyale[id2]
         if id1 != id2:
-            battleRoyale[id1].disparo(battleRoyale[id2])
-            battleRoyale[id2].disparo(battleRoyale[id1])
-            if battleRoyale[id1].vivo ==False:
+            unit1.disparar(unit1)
+            unit1.disparar(unit2)
+            if not unit1.vivo():
                 battleRoyale.pop(id1)
-            elif battleRoyale[id2].vivo ==False:
+            elif not unit2.vivo():
                 battleRoyale.pop(id2)
-            elif (battleRoyale[id1].vivo ==False) && (battleRoyale[id2].vivo == False) :
+            elif not (unit1.vivo()) and not (unit2.vivo()):
                 battleRoyale.pop(id1)
                 battleRoyale.pop(id2)
-    
-    print(f"Ganador: {battleRoyale[0].tipo}")
+        turns += 1
+
+    print(f"Después de {turns} turnos, el ganador es: {battleRoyale[0].tipo}")
 
 
+if __name__ == "__main__":
+    main()
