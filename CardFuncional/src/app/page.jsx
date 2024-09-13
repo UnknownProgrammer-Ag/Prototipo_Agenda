@@ -1,47 +1,16 @@
-import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
-import ImageArt from "./ui/imageArt";
-import ImageEvent from "./ui/imageEvent";
-import ImageEscult from "./ui/imageEscult";
-import Link from "next/link";
+//import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
+//import ImageArt from "./ui/imageArt";
+//import ImageEvent from "./ui/imageEvent";
+//import ImageEscult from "./ui/imageEscult";
+//import Link from "next/link";
+import ThreeCards from "./ui/cards";
 
 export default function Home() {
   return (
     <>
       <main>
         <nav>
-          <Card>
-            <CardHeader>
-              <h2>Arte</h2>
-            </CardHeader>
-            <CardBody>
-              <ImageArt />
-              <p>Creaciones que superan la imaginación</p>
-            </CardBody>
-            <CardFooter>
-              <Link href="/art">Ver más</Link>
-            </CardFooter>
-          </Card>
-          <Card>
-            <CardHeader>
-              <h2>Escultores</h2>
-            </CardHeader>
-            <CardBody>
-              <ImageEscult />
-              <p>Escultores de todo el mundo</p>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardHeader>
-              <h2>Eventos</h2>
-            </CardHeader>
-            <CardBody>
-              <ImageEvent />
-              <p>La Bienal cuenta con una multitud de eventos</p>
-            </CardBody>
-            <CardFooter>
-              <Link href="/events">Ver más</Link>
-            </CardFooter>
-          </Card>
+          <ThreeCards />
         </nav>
         <section>
           <h1>"Un certamen internacional único en el mundo"</h1>
