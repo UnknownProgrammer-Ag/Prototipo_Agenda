@@ -3,7 +3,9 @@ from random import randrange, choice
 
 def disparo(objetivo):
     objetivo.vida -= (1-objetivo.reduccion)
-
+    print(objetivo.tipo)
+    print(objetivo.reduccion)
+    print(objetivo.vida)
 
 class Escudo:
     def __init__(self, defensa):
@@ -24,7 +26,7 @@ class Unidad:
         disparo(objetivo)
 
     def vivo(self):
-        if self.vida == 0:
+        if self.vida <= 0:
             return False
         else:
             return True
@@ -85,13 +87,19 @@ def main():
             unit1.disparar(unit1)
             unit1.disparar(unit2)
             if not unit1.vivo():
+                print("ENTRO a unit1 muerto")
                 battleRoyale.pop(id1)
             elif not unit2.vivo():
+                print("ENTRO a unit2 muerto")
                 battleRoyale.pop(id2)
             elif not (unit1.vivo()) and not (unit2.vivo()):
+                print("ENTRO a ambos muertos")
                 battleRoyale.pop(id1)
                 battleRoyale.pop(id2)
         turns += 1
+        print(f"Turno {turns}")
+        print(f"Arreglo de unidades: {battleRoyale[0].vida} y {battleRoyale[1].vida}")
+        input()
 
     print(f"Después de {turns} turnos, el ganador es: {battleRoyale[0].tipo}")
 
